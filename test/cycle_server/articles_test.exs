@@ -66,6 +66,16 @@ defmodule Cycle.ArticlesTest do
       assert %{article | location: nil} == Articles.get_article!(article.id)
     end
 
+    test "inc_article_likes/1 increments article like count" do
+      article = article_fixture()
+      assert {:ok, %Article{likes: 1}} = Articles.inc_article_likes(article)
+    end
+
+    test "dec_article_likes/1 decrements article like count" do
+      article = article_fixture()
+      assert {:ok, %Article{likes: -1}} = Articles.dec_article_likes(article)
+    end
+
     test "delete_article/1 deletes the article" do
       article = article_fixture()
       assert {:ok, %Article{}} = Articles.delete_article(article)

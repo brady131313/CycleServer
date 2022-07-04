@@ -33,6 +33,22 @@ defmodule CycleWeb.ArticleController do
     end
   end
 
+  def inc_likes(conn, %{"id" => id}) do
+    article = Articles.get_article!(id)
+
+    with {:ok, %Article{} = article} <- Articles.inc_article_likes(article) do
+      render(conn, "show.json", article: article)
+    end
+  end
+
+  def dec_likes(conn, %{"id" => id}) do
+    article = Articles.get_article!(id)
+
+    with {:ok, %Article{} = article} <- Articles.dec_article_likes(article) do
+      render(conn, "show.json", article: article)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     article = Articles.get_article!(id)
 

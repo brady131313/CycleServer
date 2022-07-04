@@ -68,6 +68,40 @@ defmodule CycleWeb.ArticleControllerTest do
     end
   end
 
+  describe "article likes" do
+    setup [:create_article]
+
+    test "renders article when like increment succeeds", %{
+      conn: conn,
+      article: %Article{id: id} = article
+    } do
+      conn = post(conn, Routes.article_path(conn, :inc_likes, article))
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get(conn, Routes.article_path(conn, :show, id))
+
+      assert %{
+               "id" => ^id,
+               "likes" => 1
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "renders article when like decrement succeeds", %{
+      conn: conn,
+      article: %Article{id: id} = article
+    } do
+      conn = post(conn, Routes.article_path(conn, :dec_likes, article))
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get(conn, Routes.article_path(conn, :show, id))
+
+      assert %{
+               "id" => ^id,
+               "likes" => -1
+             } = json_response(conn, 200)["data"]
+    end
+  end
+
   describe "delete article" do
     setup [:create_article]
 

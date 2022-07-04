@@ -14,6 +14,7 @@ defmodule Cycle.Repo.Migrations.CreateLocations do
 
     alter table(:articles) do
       add(:location_id, references(:locations))
+      add(:likes, :integer, null: false, default: 0)
     end
 
     # Two unique indexes so postgres recognizes region of nil as seperate value

@@ -79,6 +79,18 @@ defmodule Cycle.Articles do
     |> Repo.update()
   end
 
+  def inc_article_likes(%Article{} = article) do
+    article
+    |> Article.inc_like_changeset()
+    |> Repo.update()
+  end
+
+  def dec_article_likes(%Article{} = article) do
+    article
+    |> Article.dec_like_changeset()
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a article.
 

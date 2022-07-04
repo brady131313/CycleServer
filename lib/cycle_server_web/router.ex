@@ -9,6 +9,8 @@ defmodule CycleWeb.Router do
     pipe_through :api
 
     resources "/articles", ArticleController, except: [:new, :edit]
+    post "/articles/:id/inc_likes", ArticleController, :inc_likes
+    post "/articles/:id/dec_likes", ArticleController, :dec_likes
   end
 
   # Enables LiveDashboard only for development
