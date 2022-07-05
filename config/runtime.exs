@@ -21,6 +21,16 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
+  client_secret =
+    System.get_env("CLIENT_SECRET") ||
+      raise """
+      environment variable CLIENT_SECRET is missing.
+      You can generate one by calling: mix phx.gen.secret
+      """
+
+  config :cycle_server,
+    client_secret: client_secret
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

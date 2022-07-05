@@ -15,11 +15,15 @@ defmodule CycleWeb.ArticleControllerTest do
   }
   @invalid_attrs %{title: nil, url: nil}
 
+# TODO: persist req headers between calls to get/post in tests
+
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
   describe "index" do
+    setup [:set_secret]
+
     test "lists all articles", %{conn: conn} do
       conn = get(conn, Routes.article_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
@@ -27,6 +31,8 @@ defmodule CycleWeb.ArticleControllerTest do
   end
 
   describe "create article" do
+    setup [:set_secret]
+
     test "renders article when data is valid", %{conn: conn} do
       conn = post(conn, Routes.article_path(conn, :create), article: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
@@ -47,7 +53,7 @@ defmodule CycleWeb.ArticleControllerTest do
   end
 
   describe "update article" do
-    setup [:create_article]
+    setup [:create_article, :set_secret]
 
     test "renders article when data is valid", %{conn: conn, article: %Article{id: id} = article} do
       conn = put(conn, Routes.article_path(conn, :update, article), article: @update_attrs)
@@ -69,7 +75,7 @@ defmodule CycleWeb.ArticleControllerTest do
   end
 
   describe "article likes" do
-    setup [:create_article]
+    setup [:create_article, :set_secret]
 
     test "renders article when like increment succeeds", %{
       conn: conn,
@@ -103,7 +109,7 @@ defmodule CycleWeb.ArticleControllerTest do
   end
 
   describe "delete article" do
-    setup [:create_article]
+    setup [:create_article, :set_secret]
 
     test "deletes chosen article", %{conn: conn, article: article} do
       conn = delete(conn, Routes.article_path(conn, :delete, article))
@@ -118,5 +124,9 @@ defmodule CycleWeb.ArticleControllerTest do
   defp create_article(_) do
     article = article_fixture()
     %{article: article}
+  end
+
+  defp set_secret(%{conn: conn}) do
+    %{conn: put_req_header(conn, "secret", "test_client_secret")}
   end
 end

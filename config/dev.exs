@@ -1,5 +1,8 @@
 import Config
 
+config :cycle_server,
+  client_secret: "dev_client_secret"
+
 # Configure your database
 config :cycle_server, Cycle.Repo,
   username: "postgres",

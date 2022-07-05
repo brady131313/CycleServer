@@ -3,14 +3,15 @@ defmodule CycleWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CycleWeb.ClientSecretPlug
   end
 
   scope "/api", CycleWeb do
     pipe_through :api
 
     resources "/articles", ArticleController, except: [:new, :edit]
-    post "/articles/:id/inc_likes", ArticleController, :inc_likes
-    post "/articles/:id/dec_likes", ArticleController, :dec_likes
+    post "/articles/:id/like", ArticleController, :inc_likes
+    post "/articles/:id/dislike", ArticleController, :dec_likes
   end
 
   # Enables LiveDashboard only for development

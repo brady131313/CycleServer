@@ -1,5 +1,8 @@
 import Config
 
+config :cycle_server,
+  client_secret: "test_client_secret"
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
