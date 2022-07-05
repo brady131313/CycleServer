@@ -35,7 +35,7 @@ defmodule Cycle.ArticlesTest do
 
       assert {:ok, %Article{} = article} = Articles.create_article(valid_attrs)
       assert %Location{country: "Iceland"} = article.location
-      assert length(IO.inspect(Articles.list_locations())) == 1
+      assert length(Articles.list_locations()) == 1
     end
 
     test "create_article/1 with new location" do
