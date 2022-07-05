@@ -14,6 +14,7 @@ defmodule Cycle.Application do
       CycleWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Cycle.PubSub},
+      {Finch, name: CycleFinch},
       # Start the Endpoint (http/https)
       CycleWeb.Endpoint
       # Start a worker by calling: Cycle.Worker.start_link(arg)

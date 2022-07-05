@@ -6,7 +6,7 @@ defmodule Cycle.Articles do
   import Ecto.Query, warn: false
   alias Cycle.Repo
 
-  alias Cycle.Articles.{Article, Location}
+  alias Cycle.Articles.{Article, Location, Crawler}
 
   @doc """
   Returns the list of articles.
@@ -58,7 +58,31 @@ defmodule Cycle.Articles do
   def create_article(attrs \\ %{}) do
     %Article{}
     |> Article.changeset(attrs)
+    |> maybe_scrap_title(attrs)
     |> Repo.insert()
+  end
+
+  defp maybe_scrap_title(changeset, attrs) do
+    case Ecto.Changeset.get_field(changeset, :title) do
+      nil -> scrap_title(changeset, attrs)
+      _title -> changeset
+    end
+  end
+
+  defp scrap_title(changeset, attrs) do
+    url = Ecto.Changeset.get_field(changeset, :url)
+
+    case Crawler.scrap_title(url) do
+      {:ok, title} ->
+        Article.changeset(%Article{title: title}, attrs)
+
+      {:error, _} ->
+        Ecto.Changeset.add_error(
+          changeset,
+          :title,
+          "Title was not given and couldn't be scrapped from url."
+        )
+    end
   end
 
   @doc """

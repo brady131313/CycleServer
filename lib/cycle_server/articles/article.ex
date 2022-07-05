@@ -20,9 +20,9 @@ defmodule Cycle.Articles.Article do
     article
     |> cast(attrs, [:title, :url])
     |> validate_required([:title, :url])
-    |> put_assoc(:location, parse_location(attrs))
     |> unique_constraint(:title)
     |> unique_constraint([:title, :location_id])
+    |> put_assoc(:location, parse_location(attrs))
   end
 
   defp parse_location(%{"location" => location}),
