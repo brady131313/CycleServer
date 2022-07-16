@@ -1,14 +1,19 @@
 defmodule CycleWeb.ClientSecretPlug do
   import Plug.Conn
+  import Phoenix.Controller
 
-  def init(_), do: client_secret()
+  def init(_) do
+  end
 
-  def call(conn, secret) do
+  def call(conn, _) do
+    secret = client_secret()
+
     if get_req_header(conn, "secret") == [secret] do
       conn
     else
       conn
-      |> resp(:unauthorized, "invalid client secret")
+      |> json(%{error: "invalid client secret"})
+      |> put_status(:unauthorized)
       |> halt()
     end
   end
